@@ -13,6 +13,7 @@ function Register() {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm()
 
   const onSubmit = data => console.log(data)
@@ -61,6 +62,9 @@ function Register() {
                 value: 6,
                 message: 'Min. 6 digitos',
               },
+              validate: {
+                trim: v => (!v.trim() ? 'Complete campos' : true),
+              },
             })}
           />
           {errors.password && <p>{errors.password.message}</p>}
@@ -69,8 +73,14 @@ function Register() {
             placeholder="repita password"
             // value={password}
             // onChange={(e) => setPassword(e.target.value)}
-            {...register('repassword')}
+            {...register('repassword', {
+              validate: {
+                equals: v => v === getValues('password') || 'No coinciden las contraseñas',
+              },
+            })}
           />
+          {errors.repassword && <p>{errors.repassword.message}</p>}
+
           <button type="submit">Register</button>
         </form>
       </div>
