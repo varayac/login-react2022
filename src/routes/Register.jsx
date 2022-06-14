@@ -1,7 +1,10 @@
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { UserContext } from '../context/UserProvider'
 import { useForm } from 'react-hook-form'
+import { firebaseErrors } from '../utils/firebaseErrors'
+import { UserContext } from '../context/UserProvider'
+
+import FormErrors from '../components/FormErrors'
 
 function Register() {
   /* const [email, setEmail] = useState('va@test.com')
@@ -14,9 +17,20 @@ function Register() {
     handleSubmit,
     formState: { errors },
     getValues,
+    setError,
   } = useForm()
 
-  const onSubmit = data => console.log(data)
+  const onSubmit = async ({ email, password }) => {
+    try {
+      await registerUser(email, password)
+      navigate('/')
+    } catch (error) {
+      console.log(error.code)
+      setError('firebase', {
+        message: firebaseErrors(error.code),
+      })
+    }
+  }
 
   /*
 	const handleSubmit = async (e) => {
@@ -30,9 +44,11 @@ function Register() {
 		}
 	}
 	*/
+
   return (
     <>
       <h2>Register</h2>
+      <FormErrors error={errors.firebase} />
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
@@ -51,7 +67,7 @@ function Register() {
               },
             })}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          <FormErrors error={errors.email} />
           <input
             type="password"
             placeholder="ingrese password"
@@ -67,7 +83,7 @@ function Register() {
               },
             })}
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          <FormErrors error={errors.password} />
           <input
             type="password"
             placeholder="repita password"
@@ -79,7 +95,7 @@ function Register() {
               },
             })}
           />
-          {errors.repassword && <p>{errors.repassword.message}</p>}
+          <FormErrors error={errors.repassword} />
 
           <button type="submit">Register</button>
         </form>
