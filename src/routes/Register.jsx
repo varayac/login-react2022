@@ -64,7 +64,7 @@ function Register() {
             type="password"
             placeholder="Repita password"
             {...register('repassword', {
-              validate: validateEquals(getValues),
+              validate: validateEquals(getValues('password')),
             })}
           >
             <FormErrors error={errors.repassword} />
