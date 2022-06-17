@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { firebaseErrors } from '../utils/firebaseErrors'
 import { UserContext } from '../context/UserProvider'
+import { formValidates } from '../utils/formValidates'
 
 import FormErrors from '../components/FormErrors'
+import FormImputs from '../components/FormImputs'
 
 function Register() {
-  /* const [email, setEmail] = useState('va@test.com')
-	const [password, setPassword] = useState('123123') */
   const navigate = useNavigate()
   const { registerUser } = useContext(UserContext)
+  const { required, patternEmail, minLength, validateTrim, validateEquals } = formValidates()
 
   const {
     register,
@@ -26,24 +27,10 @@ function Register() {
       navigate('/')
     } catch (error) {
       console.log(error.code)
-      setError('firebase', {
-        message: firebaseErrors(error.code),
-      })
+      const { code, message } = firebaseErrors(error.code)
+      setError(code, { message })
     }
   }
-
-  /*
-	const handleSubmit = async (e) => {
-		e.preventDefault()
-		try {
-			await registerUser(email, password)
-			console.log(`Usuario Creado: ${email} ${password}`)
-			navigate('/')
-		} catch (error) {
-			console.log(`ERROR: ${error.code}`)
-		}
-	}
-	*/
 
   return (
     <>
@@ -51,51 +38,37 @@ function Register() {
       <FormErrors error={errors.firebase} />
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <input
+          <FormImputs
             type="email"
-            placeholder="ingrese email"
-            // value={email}
-            // onChange={(e) => setEmail(e.target.value)}
+            placeholder="Ingrese email"
             {...register('email', {
-              required: {
-                value: true,
-                message: 'Campo obligatorio',
-              },
-              pattern: {
-                value: /[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})/,
-                message: 'Ingrese mail valido',
-              },
+              required,
+              pattern: patternEmail,
             })}
-          />
-          <FormErrors error={errors.email} />
-          <input
+          >
+            <FormErrors error={errors.email} />
+          </FormImputs>
+
+          <FormImputs
             type="password"
-            placeholder="ingrese password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
+            placeholder="Ingrese password"
             {...register('password', {
-              minLength: {
-                value: 6,
-                message: 'Min. 6 digitos',
-              },
-              validate: {
-                trim: v => (!v.trim() ? 'Complete campos' : true),
-              },
+              minLength,
+              validate: validateTrim,
             })}
-          />
-          <FormErrors error={errors.password} />
-          <input
+          >
+            <FormErrors error={errors.password} />
+          </FormImputs>
+
+          <FormImputs
             type="password"
-            placeholder="repita password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
+            placeholder="Repita password"
             {...register('repassword', {
-              validate: {
-                equals: v => v === getValues('password') || 'No coinciden las contraseñas',
-              },
+              validate: validateEquals(getValues),
             })}
-          />
-          <FormErrors error={errors.repassword} />
+          >
+            <FormErrors error={errors.repassword} />
+          </FormImputs>
 
           <button type="submit">Register</button>
         </form>

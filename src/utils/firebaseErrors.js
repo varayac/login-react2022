@@ -1,10 +1,29 @@
 export const firebaseErrors = code => {
   switch (code) {
     case 'auth/email-already-in-use':
-      return 'Usuario ya registrado'
+      return {
+        code: 'email',
+        message: 'Usuario ya registrado',
+      }
     case 'auth/invalid-email':
-      return 'Formato email invalido'
+      return {
+        code: 'email',
+        message: 'Formato email invalido',
+      }
+    case 'auth/user-not-found':
+      return {
+        code: 'email',
+        message: 'Usuario no registrado',
+      }
+    case 'auth/wrong-password':
+      return {
+        code: 'password',
+        message: 'Contraseña invalida',
+      }
     default:
-      return 'Ocurrio un error en el server'
+      return {
+        code: 'email',
+        message: 'Ocurrio un error en el server',
+      }
   }
 }
