@@ -7,6 +7,8 @@ import { formValidates } from '../utils/formValidates'
 
 import FormErrors from '../components/FormErrors'
 import FormImputs from '../components/FormImputs'
+import Title from '../components/Title'
+import Button from '../components/Button'
 
 function Login() {
   const { loginUser } = useContext(UserContext)
@@ -33,32 +35,36 @@ function Login() {
 
   return (
     <>
-      <h2>Login</h2>
+      <Title titleText="Sing in" />
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormImputs
             type="email"
-            placeholder="Ingrese email"
+            placeholder="Email"
             {...register('email', {
               required,
               pattern: patternEmail,
             })}
+            label="Enter your email"
+            error={errors.email}
           >
             <FormErrors error={errors.email} />
           </FormImputs>
 
           <FormImputs
             type="password"
-            placeholder="Ingrese password"
+            placeholder="Password"
             {...register('password', {
               minLength,
               validate: validateTrim,
             })}
+            label="Enter your password"
+            error={errors.password}
           >
             <FormErrors error={errors.password} />
           </FormImputs>
 
-          <button type="submit">Login</button>
+          <Button buttonText="Log In" type="submit" />
         </form>
       </div>
     </>

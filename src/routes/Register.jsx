@@ -7,6 +7,8 @@ import { formValidates } from '../utils/formValidates'
 
 import FormErrors from '../components/FormErrors'
 import FormImputs from '../components/FormImputs'
+import Title from '../components/Title'
+import Button from '../components/Button'
 
 function Register() {
   const navigate = useNavigate()
@@ -34,43 +36,49 @@ function Register() {
 
   return (
     <>
-      <h2>Register</h2>
+      <Title titleText="Register" />
       <FormErrors error={errors.firebase} />
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormImputs
             type="email"
-            placeholder="Ingrese email"
+            placeholder="Email"
             {...register('email', {
               required,
               pattern: patternEmail,
             })}
+            label="Enter your email"
+            error={errors.email}
           >
             <FormErrors error={errors.email} />
           </FormImputs>
 
           <FormImputs
             type="password"
-            placeholder="Ingrese password"
+            placeholder="Password"
             {...register('password', {
               minLength,
               validate: validateTrim,
             })}
+            label="Enter your password"
+            error={errors.password}
           >
             <FormErrors error={errors.password} />
           </FormImputs>
 
           <FormImputs
             type="password"
-            placeholder="Repita password"
+            placeholder="Repeat password"
             {...register('repassword', {
               validate: validateEquals(getValues('password')),
             })}
+            label="Repeat password"
+            error={errors.repassword}
           >
             <FormErrors error={errors.repassword} />
           </FormImputs>
 
-          <button type="submit">Register</button>
+          <Button buttonText="Register" type="submit" />
         </form>
       </div>
     </>

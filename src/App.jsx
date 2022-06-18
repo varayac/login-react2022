@@ -1,22 +1,14 @@
-import './styles.css'
 import Home from './routes/Home'
 import Login from './routes/Login'
 import NavBar from './components/NavBar'
 import Register from './routes/Register'
 import RequireAuth from './components/RequireAuth'
+import LayoutContainerForm from './components/LayoutContainerForm'
 
 import { Routes, Route } from 'react-router-dom'
-import { UserProvider /* UserContext */ } from './context/UserProvider'
-// import { useContext } from 'react'
+import { UserProvider } from './context/UserProvider'
 
 export default function App() {
-  /* 
-  const { user } = useContext(UserContext)
-	if (user === false) {
-		return <p>Loading...</p>
-	} 
-  */
-
   return (
     <UserProvider>
       <div className="App">
@@ -30,8 +22,11 @@ export default function App() {
               </RequireAuth>
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+
+          <Route path="/" element={<LayoutContainerForm />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
         </Routes>
       </div>
     </UserProvider>
